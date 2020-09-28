@@ -1193,6 +1193,7 @@ export const handlers: Map<number, OpHandler> = new Map([
         runState.eei.useGas(new BN(runState._common.param('gasPrices', 'callNewAccount')))
       }
 
+      accessAddressEIP2929(runState, selfdestructToAddress, 0)
       return runState.eei.selfDestruct(selfdestructToAddressBuf)
     },
   ],
