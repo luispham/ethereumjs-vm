@@ -8,7 +8,7 @@
     "dist/**/*"
   ],
   "scripts": {
-    "prepublishOnly": "npm run lint && npm run test && npm run build",
+    "prepublishOnly": "yarn run lint && yarn run test && yarn run build",
     "build": "ethereumjs-config-build",
     "coverage": "ethereumjs-config-coverage",
     "docs:build": "typedoc --options typedoc.js",

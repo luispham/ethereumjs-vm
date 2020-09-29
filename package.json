@@ -7,33 +7,36 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint"
+      "//pre-push": "yarn run lint"
     }
   },
   "scripts": {
-    "postinstall": "npm run bootstrap",
-    "bootstrap": "lerna bootstrap --ignore-scripts --include-dependencies --no-ci --hoist && npm run build",
-    "bootstrap:account": "npm run bootstrap -- --scope @ethereumjs/account",
-    "bootstrap:block": "npm run bootstrap -- --scope @ethereumjs/block",
-    "bootstrap:blockchain": "npm run bootstrap -- --scope @ethereumjs/blockchain",
-    "bootstrap:common": "npm run bootstrap -- --scope @ethereumjs/common",
-    "bootstrap:ethash": "npm run bootstrap -- --scope @ethereumjs/ethash",
-    "bootstrap:tx": "npm run bootstrap -- --scope @ethereumjs/tx",
-    "bootstrap:vm": "npm run bootstrap -- --scope @ethereumjs/vm",
+    "postinstall": "time yarn run build",
+    "bootstrap": "lerna bootstrap --ignore-scripts --include-dependencies --no-ci --hoist && date && yarn run build && date",
+    "bootstrap:account": "yarn run bootstrap -- --scope @ethereumjs/account",
+    "bootstrap:block": "yarn run bootstrap -- --scope @ethereumjs/block",
+    "bootstrap:blockchain": "yarn run bootstrap -- --scope @ethereumjs/blockchain",
+    "bootstrap:common": "yarn run bootstrap -- --scope @ethereumjs/common",
+    "bootstrap:ethash": "yarn run bootstrap -- --scope @ethereumjs/ethash",
+    "bootstrap:tx": "yarn run bootstrap -- --scope @ethereumjs/tx",
+    "bootstrap:vm": "yarn run bootstrap -- --scope @ethereumjs/vm",
     "build": "lerna run build --stream",
     "build:tree": "lerna run build --stream --include-dependencies",
-    "build:account": "npm run build:tree -- --scope @ethereumjs/account",
-    "build:block": "npm run build:tree -- --scope @ethereumjs/block",
-    "build:blockchain": "npm run build:tree -- --scope @ethereumjs/blockchain",
-    "build:common": "npm run build:tree -- --scope @ethereumjs/common",
-    "build:ethash": "npm run build:tree -- --scope @ethereumjs/ethash",
-    "build:tx": "npm run build:tree -- --scope @ethereumjs/tx",
-    "build:vm": "npm run build:tree -- --scope @ethereumjs/vm",
+    "build:account": "yarn run build:tree -- --scope @ethereumjs/account",
+    "build:block": "yarn run build:tree -- --scope @ethereumjs/block",
+    "build:blockchain": "yarn run build:tree -- --scope @ethereumjs/blockchain",
+    "build:common": "yarn run build:tree -- --scope @ethereumjs/common",
+    "build:ethash": "yarn run build:tree -- --scope @ethereumjs/ethash",
+    "build:tx": "yarn run build:tree -- --scope @ethereumjs/tx",
+    "build:vm": "yarn run build:tree -- --scope @ethereumjs/vm",
     "lint": "lerna run lint --stream --parallel",
     "lint:fix": "lerna run lint:fix --stream --parallel",
-    "test": "lerna exec npm run test --parallel",
+    "test": "lerna exec yarn run test --parallel",
     "coverage": "lerna run coverage --stream",
     "docs:build": "lerna run docs:build --ignore @ethereumjs/ethash",
     "clean": "lerna exec -- rm -rf node_modules && rm -rf node_modules"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
