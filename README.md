@@ -49,7 +49,7 @@ npm build
 
 TLDR: To update dependencies and (re-)link packages
 ```sh
-npm run bootstrap
+yarn run bootstrap
 npm build
 ```
 
@@ -60,19 +60,19 @@ Above is the quickest way to set you up. Going down the road, there are two sets
 #### `npm install`
 Adds dependencies listed in the root package. Also, it executes the `bootstrap` script described below, installing all sub-packages dependencies.
 
-#### `npm run bootstrap`
+#### `yarn run bootstrap`
 
 Installs dependencies for all sub-packages, and links them to create an integrated development environment.
 
-#### `npm run build`
+#### `yarn run build`
 
 Produces `dist` files for all sub-packages. This command can be scoped.
 
-#### `npm run build:tree -- --scope @ethereumjs/blockchain`
+#### `yarn run build:tree -- --scope @ethereumjs/blockchain`
 
 Builds all local packages that the provided package (eg: @ethereumjs/blockchain) depends on, and itself. This unusual syntax just means: pass whatever arguments are after `--` to the underlying script. 
 
-If no scope is provided, `npm run build:tree`, will build all sub-packages.
+If no scope is provided, `yarn run build:tree`, will build all sub-packages.
 
 ### Package scripts — run from `./packages/<name>`
 
@@ -80,31 +80,31 @@ If no scope is provided, `npm run build:tree`, will build all sub-packages.
  
 There's a set of rather standardized commands you will find in each package of this repository.
 
-#### `npm run build`
+#### `yarn run build`
 
 Uses TypeScript compiler to build files from `src` or `lib`. Files can be found at `packages/<name>/dist`.
 
-#### `npm run coverage`
+#### `yarn run coverage`
 
-Runs whatever is on `npm run test` script, capturing coverage information. By the end, it displays a coverage table. Additional reports can be found at `packages/<name>/coverage`.
+Runs whatever is on `yarn run test` script, capturing coverage information. By the end, it displays a coverage table. Additional reports can be found at `packages/<name>/coverage`.
 
-#### `npm run docs:build`
+#### `yarn run docs:build`
 
 Generates package documentation and outputs it to `./packages/<name>/docs`.
 
-#### `npm run lint`
+#### `yarn run lint`
 
 Checks code style according to the rules defined in [ethereumjs-config](https://github.com/ethereumjs/ethereumjs-config).
 
-#### `npm run lint:fix`
+#### `yarn run lint:fix`
 
 Fixes code style according to the rules.
 
-#### `npm run test`
+#### `yarn run test`
 
 Runs all package tests. Note that the VM has several test scopes - refer to [packages/vm/package.json](https://github.com/ethereumjs/ethereumjs-vm/blob/master/packages/vm/package.json) for more info.
 
-#### `npm run clean`
+#### `yarn run clean`
 
 Removes root and package `node_modules` directories. Useful to run before `npm i` for a fresh install.
 
@@ -118,7 +118,7 @@ As this project is powered by Lerna, you can install it globally to enjoy lots m
 
 #### Cleaning `node_modules`
 
-Hoisting is enabled so dependencies are moved to the root `node_modules`. `lerna clean` [does not remove the root `node_modules`](https://github.com/lerna/lerna/issues/1304) so for convenience you can use the project script `npm run clean`.
+Hoisting is enabled so dependencies are moved to the root `node_modules`. `lerna clean` [does not remove the root `node_modules`](https://github.com/lerna/lerna/issues/1304) so for convenience you can use the project script `yarn run clean`.
 
 # EthereumJS
 
