@@ -1,10 +1,9 @@
 const Set = require('core-js-pure/es/set')
 import { SecureTrie as Trie } from 'merkle-patricia-tree'
-import { BN, toBuffer, keccak256, KECCAK256_NULL, unpadBuffer } from 'ethereumjs-util'
+import { Account, BN, toBuffer, keccak256, KECCAK256_NULL, unpadBuffer } from 'ethereumjs-util'
 import { encode, decode } from 'rlp'
 import Common from '@ethereumjs/common'
 import { genesisStateByName } from '@ethereumjs/common/dist/genesisStates'
-import Account from '@ethereumjs/account'
 import { StateManager, StorageDump } from './interface'
 import Cache from './cache'
 import { ripemdPrecompileAddress } from '../evm/precompiles'
@@ -66,32 +65,30 @@ export default class DefaultStateManager implements StateManager {
   }
 
   /**
-   * Gets the [`@ethereumjs/account`](https://github.com/ethereumjs/ethereumjs-vm/tree/master/packages/account)
-   * associated with `address`. Returns an empty account if the account does not exist.
+   * Gets the account associated with `address`. Returns an empty account if the account does not exist.
    * @param address - Address of the `account` to get
    */
   async getAccount(address: Buffer): Promise<Account> {
     const account = await this._cache.getOrLoad(address)
-    return account
+    return account || new Account()
   }
 
   /**
-   * Saves an [`@ethereumjs/account`](https://github.com/ethereumjs/ethereumjs-vm/tree/master/packages/account)
-   * into state under the provided `address`.
+   * Saves an account into state under the provided `address`.
    * @param address - Address under which to store `account`
-   * @param account - The [`@ethereumjs/account`](https://github.com/ethereumjs/ethereumjs-vm/tree/master/packages/account) to store
+   * @param account - The account to store
    */
   async putAccount(address: Buffer, account: Account): Promise<void> {
-    // TODO: dont save newly created accounts that have no balance
-    // if (toAccount.balance.toString('hex') === '00') {
-    // if they have money or a non-zero nonce or code, then write to tree
+    // TODO: don't save newly created accounts that have no balance
+    // if (account.isEmpty()) {
+    //   return
+    // }
     this._cache.put(address, account)
     this.touchAccount(address)
   }
 
   /**
-   * Deletes an [`@ethereumjs/account`](https://github.com/ethereumjs/ethereumjs-vm/tree/master/packages/account)
-   * from state under the provided `address`. The account will also be removed from the state trie.
+   * Deletes an account from state under the provided `address`. The account will also be removed from the state trie.
    * @param address - Address of the account which should be deleted
    */
   async deleteAccount(address: Buffer) {
@@ -123,10 +120,10 @@ export default class DefaultStateManager implements StateManager {
       return
     }
 
+    await this._trie._mainDB.put(codeHash, value)
+
     const account = await this.getAccount(address)
     account.codeHash = codeHash
-
-    await this._trie._mainDB.put(codeHash, value)
     await this.putAccount(address, account)
   }
 
@@ -480,12 +477,8 @@ export default class DefaultStateManager implements StateManager {
 
     const addresses = Object.keys(initState)
     for (const address of addresses) {
-      const account = new Account()
-      if (initState[address].slice(0, 2) === '0x') {
-        account.balance = new BN(initState[address].slice(2), 16).toArrayLike(Buffer)
-      } else {
-        account.balance = new BN(initState[address]).toArrayLike(Buffer)
-      }
+      const balance = new BN(toBuffer(initState[address]))
+      const account = new Account(new BN(0), balance)
       const addressBuffer = toBuffer(address)
       await this._trie.put(addressBuffer, account.serialize())
     }
